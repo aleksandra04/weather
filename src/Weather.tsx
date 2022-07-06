@@ -1,9 +1,14 @@
 import React from "react";
 import { withRouter, RouteComponentProps } from "react-router-dom";
-import { cities, CityType } from "./App";
+import { cities } from "./App";
 import { NextDaysForecast } from "./NextDaysForecast";
 import { Today } from "./Today";
 import "./styles/weather.css";
+import { Loader } from "./Loader";
+import { Error } from "./Error";
+import { getApiUrl, processApiResponse } from "./utils";
+import { WeatherInfoT } from "./types";
+
 const ID = "86b5e8d3f955d37aecffa96ca1c7c9bd";
 
 interface MatchParams {
@@ -11,76 +16,78 @@ interface MatchParams {
 }
 interface WeatherProps extends RouteComponentProps<MatchParams> {}
 
-export type WeatherInfoT = {
-  date: Date;
-  weather: {
-    description: string;
-    icon: string;
-    id: number;
-    main: string;
-  };
-  temperature: {
-    [key: string]: number;
-  };
+type stateT = {
+  selectedCityWeather: WeatherInfoT[];
+  loading: boolean;
+  error: boolean;
 };
 
-class WeatherImpl extends React.Component<WeatherProps, {}> {
+class WeatherImpl extends React.Component<WeatherProps, stateT> {
   state = {
     selectedCityWeather: [],
+    loading: false,
+    error: false,
   };
 
   componentDidMount() {
-    const url = this.getApiUrl();
-    this.getForecast(url);
+    this.getForecast();
   }
 
   componentDidUpdate(prevProps: WeatherProps) {
     if (prevProps.match.params.city !== this.props.match.params.city) {
-      const url = this.getApiUrl();
-      this.getForecast(url);
+      this.getForecast();
     }
   }
 
-  getApiUrl = () => {
-    const cityName = this.props.match.params.city;
-    const city = cities.find((city: CityType) => {
-      return city.id === cityName;
-    }) as CityType;
-
-    return `https://api.openweathermap.org/data/2.5/onecall?lat=${city.lat}4&lon=${city.lon}&exclude=hourly,minutely,alerts,current&units=metric&appid=${ID}`;
+  getForecast = () => {
+    this.setState((prevState) => ({
+      ...prevState,
+      error: false,
+    }));
+    const url = getApiUrl(this.props.match.params.city, cities, ID);
+    this.fetchForecast(url);
   };
 
-  getForecast = async (url: string) => {
+  fetchForecast = async (url: string) => {
+    this.setState((prevState) => ({
+      ...prevState,
+      loading: true,
+    }));
     try {
       const result = await fetch(url);
       const json = await result.json();
-      const weatherInfo = json.daily.reduce(
-        (acc: WeatherInfoT[], curr: any, index: number) => {
-          index < 5 &&
-            acc.push({
-              date: new Date(curr.dt * 1000),
-              weather: { ...curr.weather[0] },
-              temperature: { ...curr.temp },
-            });
-          return acc;
-        },
-        []
-      );
-      this.setState(() => ({
+      const weatherInfo = processApiResponse(json);
+
+      this.setState((prevState) => ({
+        ...prevState,
         selectedCityWeather: weatherInfo,
       }));
     } catch (err) {
-      alert("something went wrong, try again");
+      this.setState((prevState) => ({
+        ...prevState,
+        error: true,
+      }));
+    } finally {
+      this.setState((prevState) => ({
+        ...prevState,
+        loading: false,
+      }));
     }
   };
 
   render() {
+    const { selectedCityWeather, loading, error } = this.state;
+
     return (
       <main className="weatherWrapper">
-        <Today dayWeather={this.state.selectedCityWeather[0]} />
-        <NextDaysForecast
-          nextDaysForecast={this.state.selectedCityWeather.slice(1)}
-        />
+        {loading && <Loader />}
+        {!loading && !error && (
+          <>
+            <Today dayWeather={selectedCityWeather[0]} />
+            <NextDaysForecast nextDaysForecast={selectedCityWeather.slice(1)} />
+          </>
+        )}
+        {error && <Error />}
       </main>
     );
   }

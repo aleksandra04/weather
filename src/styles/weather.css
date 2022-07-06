@@ -5,8 +5,12 @@ body {
   color: #333339;
 }
 .weatherWrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
   background-color: #eef6fb;
   width: 840px;
+  height: 579px;
   box-sizing: border-box;
   border: 5px solid white;
   border-radius: 15px;

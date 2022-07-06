@@ -1,10 +1,11 @@
 import { DayForecast } from "./DayForecast";
-import { WeatherInfoT } from "./Weather";
 import "./styles/weather.css";
+import { WeatherInfoT } from "./types";
 
 type NextDaysForecastT = {
   nextDaysForecast: WeatherInfoT[];
 };
+
 export const NextDaysForecast = (props: NextDaysForecastT) => {
   return (
     <div className="forecastWrapper">

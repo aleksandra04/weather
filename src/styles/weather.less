@@ -2,8 +2,12 @@
 @borderWidth: 5px;
 
 .weatherWrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
   background-color: @backgroundColor;
   width: 840px;
+  height: 579px;
   box-sizing: border-box;
   border: @borderWidth solid white;
   border-radius: 15px;
@@ -11,7 +15,6 @@
 }
 
 .todayWrapper {
-  // height: 300px;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;

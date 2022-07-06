@@ -23,13 +23,6 @@ export const cities = [
   },
 ];
 
-export type CityType = {
-  name: string;
-  id: string;
-  lat: number;
-  lon: number;
-};
-
 function App() {
   return (
     <Switch>
