@@ -1,25 +1,41 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { Redirect, Route, Switch } from "react-router-dom";
+
+import { Main } from "./Main";
+
+export const cities = [
+  {
+    name: "Toronto",
+    id: "toronto",
+    lat: 43.6534817,
+    lon: -79.3839347,
+  },
+  {
+    name: "London",
+    id: "london",
+    lat: 51.5073219,
+    lon: -0.1276474,
+  },
+  {
+    name: "Tokyo",
+    id: "tokyo",
+    lat: 35.6828387,
+    lon: 139.7594549,
+  },
+];
+
+export type CityType = {
+  name: string;
+  id: string;
+  lat: number;
+  lon: number;
+};
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Switch>
+      <Route path="/:city" component={Main} />
+      <Redirect from="/" to={`/${cities[0].id}`} />
+    </Switch>
   );
 }
 

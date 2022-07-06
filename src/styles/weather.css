@@ -1,0 +1,73 @@
+body {
+  background-color: #eef6fb;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 100;
+  color: #333339;
+}
+.weatherWrapper {
+  background-color: #eef6fb;
+  width: 840px;
+  box-sizing: border-box;
+  border: 5px solid white;
+  border-radius: 15px;
+  margin: 0 auto;
+}
+.todayWrapper {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  padding: 60px;
+  align-items: center;
+}
+.todayHeader {
+  font-size: 32px;
+  margin-bottom: 40px;
+}
+.todayInfoWrapper {
+  display: flex;
+  width: 270px;
+  justify-content: space-between;
+}
+.icon {
+  font-size: 140px;
+  color: #45666c;
+  align-self: center;
+}
+.icon--small {
+  font-size: 80px;
+}
+.degree {
+  font-family: 'Teko', sans-serif;
+  font-size: 90px;
+  margin: 0;
+  height: 100px;
+}
+.degree--small {
+  font-size: 40px;
+  height: 80px;
+}
+.weatherDescription {
+  margin: 0;
+  font-size: 32px;
+}
+.forecastWrapper {
+  display: flex;
+  width: 100%;
+  border-top: 5px solid white;
+}
+.dayForecastWrapper {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border-right: 5px solid white;
+  box-sizing: border-box;
+}
+.dayForecastWrapper:last-child {
+  border-right: none;
+}
+.dayForecastHeader {
+  font-size: 24px;
+  margin: 24px 0 12px;
+}
+/*# sourceMappingURL=weather.css.map */
